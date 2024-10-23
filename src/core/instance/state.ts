@@ -306,7 +306,12 @@ function initMethods(vm: Component, methods: Object) {
       }
     }
     function changeMethodsThis() {
-      return () => methods[key].call(this)
+      const arrowWrap = function() {
+        bind(methods[key], this)
+      }
+      return bind(arrowWrap, this)
+      // return bind(methods[key], this)
+      // return () => methods[key].call(this)
     }
 
     vm[key] = typeof methods[key] !== 'function' ? noop : changeMethodsThis.call(vm)
