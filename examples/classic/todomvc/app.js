@@ -122,7 +122,8 @@ var app = new Vue({
       todo.title = this.beforeEditCache
     },
 
-    removeCompleted: function () {
+    removeCompleted: () => {
+      console.log(this, this.todos, 'this.todos........')
       this.todos = filters.active(this.todos)
     }
   },
@@ -140,7 +141,7 @@ var app = new Vue({
 })
 
 // handle routing
-function onHashChange () {
+function onHashChange() {
   var visibility = window.location.hash.replace(/#\/?/, '')
   if (filters[visibility]) {
     app.visibility = visibility

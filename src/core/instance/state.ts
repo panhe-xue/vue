@@ -286,15 +286,15 @@ function initMethods(vm: Component, methods: Object) {
   const props = vm.$options.props
   for (const key in methods) {
     if (__DEV__) {
-      if (typeof methods[key] !== 'function') {
-        warn(
-          `Method "${key}" has type "${typeof methods[
-            key
-          ]}" in the component definition. ` +
-            `Did you reference the function correctly?`,
-          vm
-        )
-      }
+      // if (typeof methods[key] !== 'function') {
+      //   warn(
+      //     `Method "${key}" has type "${typeof methods[
+      //       key
+      //     ]}" in the component definition. ` +
+      //       `Did you reference the function correctly?`,
+      //     vm
+      //   )
+      // }
       if (props && hasOwn(props, key)) {
         warn(`Method "${key}" has already been defined as a prop.`, vm)
       }
@@ -305,16 +305,22 @@ function initMethods(vm: Component, methods: Object) {
         )
       }
     }
-    function changeMethodsThis() {
-      const arrowWrap = function() {
-        bind(methods[key], this)
+    const changeMethodsThis = function () {
+      const arrowWrap = function () {
+        const method = methods[key]
+        console.log('触发了吗??????????', method, this)
+        method()
+        // bind(methods[key], this)()
+        // methods[key].call(this)
       }
+      console.log('触发了吗??????????1111111')
       return bind(arrowWrap, this)
       // return bind(methods[key], this)
       // return () => methods[key].call(this)
     }
 
-    vm[key] = typeof methods[key] !== 'function' ? noop : changeMethodsThis.call(vm)
+    // vm[key] = typeof methods[key] !== 'function' ? noop : changeMethodsThis.call(vm)
+    vm[key] = changeMethodsThis.call(vm)
   }
 }
 
